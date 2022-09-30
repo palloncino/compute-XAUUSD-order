@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <title>XAUUSD</title>
+</head>
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    body {
+        margin: 0;
+        font-family: Roboto;
+    }
+
+    iframe {
+        width: 100%!important;
+    }
+
+    .header {
+        background-color: #111;
+        color: #fff;
+        height: 50px;
+    }
+
+    .header-wrapper {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .header__logo {
+        margin: 0;
+    }
+
+    .output {
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        min-height: 68.5px;
+    }
+
+    .output__action {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #111;
+    }
+
+    .output__lot {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #111;
+    }
+
+    .output__action__container {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .output__action__container.loss {
+        color: #d64b57;
+    }
+
+    .output__action__container.profit {
+        color: #4a87c4;
+    }
+
+    .output__SL {
+        font-family: 1rem;
+    }
+
+    .output__TP {
+        font-family: 1rem;
+    }
+
+    .container {
+        width: 800px;
+        margin: 20px auto;
+        padding: 10px 20px;
+        color: #111;
+    }
+
+    .input-container {
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+    .input-container__entry-price {
+        display: flex;
+    }
+
+    .input-container__stop-price {
+        display: flex;
+    }
+
+    .input-container:last-child {
+        margin-bottom: 0px;
+    }
+
+    .input {
+        padding: 5px;
+        font-size: 1.2rem;
+        border: none;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.1);
+        color: #111;
+    }
+
+    .input-action {
+        border: none;
+        display: inline-block;
+        background-color: rgba(0, 0, 0, 0.1);
+        color: black;
+        padding: 10px;
+        width: 200px;
+        cursor: pointer;
+    }
+
+    .input-action.active {
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .input-action__buy.active {
+        background-color: #4a87c4;
+    }
+
+    .input-action__sell.active {
+        background-color: #d64b57;
+    }
+
+    .input__submit {
+        background-color: #4a87c4;
+        width: 100%;
+        color: #fff;
+        cursor: pointer;
+        padding: 20px;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        background-color: #111;
+        color: #fff;
+    }
+
+    .footer-content {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer-info {
+        padding: 0 20px;
+    }
+
+    #open-graph {
+        border: none;
+        width: 30%;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .container {
+            box-sizing: border-box;
+            padding: 5px;
+            width: 100%;
+        }
+
+        .input-container {
+            padding: 0px;
+            margin-bottom: 10px;
+        }
+
+        .input {
+            box-sizing: border-box;
+            padding: 5px;
+        }
+
+        .input-container {
+            padding: 0px;
+        }
+
+        .input-container__actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        .footer {
+            /* display: none; */
+            font-size: .5rem;
+        }
+
+        .input__submit {
+            display: inline-block;
+            color: #fff;
+            padding: 10px;
+            width: 200px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.35);
+        }
+
+        .input-container__submit {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+    }
+</style>
+
+<body>
+    <div class="header">
+        <div class="header-wrapper">
+            <h2 class="header__logo">XAUUSD</h2>&nbsp;&nbsp;
+            <a href="http://www.hitwebcounter.com" target="_blank">
+            	<img src="http://hitwebcounter.com/counter/counter.php?page=6942477&amp;style=0007&amp;nbdigits=5&amp;type=page&amp;initCount=0" title="Hit Web Stats" alt="Hit Web Stats" border="0">
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="output">
+            <span class="output__action">COMPILE ORDER</span>
+            <span class="output__lot"></span>
+            <div class="output__action__container loss">
+                <span class="output__SL">SL</span>
+                <span class="output__SL__cash">€0.00</span>
+            </div>
+            <div class="output__action__container profit">
+                <span class="output__TP">TP</span>
+                <span class="output__TP__cash">€0.00</span>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form">
+            <div class="input-container input-container__actions">
+                <input id="input-action__buy" class="input-action input-action__buy active" value="BUY" readonly />
+                <input class="input-action input-action__sell" value="SELL" readonly/>
+            </div>
+            <div class="input-container">
+                <label for="risk">EURUSD conversion</label>
+                <input name="risk" type="number" id="input__eurusd" value="1.21" class="input input__eurusd"
+                    step=".01" />
+            </div>
+            <div class="input-container">
+                <label for="risk">Capital €</label>
+                <input name="risk" type="number" id="input__capital" value="0.00" class="input input__capital" />
+            </div>
+            <div class="input-container">
+                <label for="risk">Risk to Reward ( 1 = 1% of capital )</label>
+                <input name="risk-to-reward" type="text" id="input__risk-to-reward"
+                    class="input input__risk-to-reward" value="1:1.5" />
+            </div>
+            <div class="input-container">
+                <label for="entry-price">Entry Price</label>
+                <div class="input-container__entry-price">
+                    <input name="entry-price" type="number" id="input__entry-price" class="input input__entry-price"
+                        step=".01" />
+                    <!-- <button id="open-graph">📈</button> -->
+                </div>
+            </div>
+            <div class="input-container">
+                <label for="stop-price">Stop Loss</label>
+                <div class="input-container__stop-price">
+                    <input name="stop-price" type="number" id="input__stop-price" class="input input__stop-price"
+                        step=".01" />
+                    <!-- <button id="open-graph">📈</button> -->
+                </div>
+            </div>
+            <div class="input-container input-container__submit">
+                <input id="input__submit" class="input input__submit" type="submit" value="compute order" />
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="tradingview-widget-container">
+            <div id="tradingview_d2e82"></div>
+        </div>
+    </div>
+    <br><br>
+    <div class="footer">
+        <div class="footer-content">
+            <span class="footer-info">EU leverage up to 15</span>
+            <span class="footer-info">1.00 = lot</span>
+            <span class="footer-info">0.10 = mini</span>
+            <span class="footer-info">0.01 = micro</span>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+        new TradingView.MediumWidget(
+            {
+                "symbols": ["XAUUSD, EURUSD"],
+                "chartOnly": false,
+                "width": 1000,
+                "height": 400,
+                "locale": "en",
+                "colorTheme": "light",
+                "gridLineColor": "#f0f3fa",
+                "trendLineColor": "#2196f3",
+                "fontColor": "#787b86",
+                "underLineColor": "#e3f2fd",
+                "isTransparent": true,
+                "autosize": false,
+                "container_id": "tradingview_d2e82"
+            }
+        );
+    </script>
+    <script>
+        const submit = document.querySelector('#input__submit');
+        const action__buy = document.querySelector('#input-action__buy');
+        const action__sell = document.querySelector('.input-action__sell');
+
+        const buyActive = () => {
+            const isActive = action__buy.classList.contains('active');
+            if (!isActive) {
+                action__sell.classList.remove('active');
+                action__buy.classList.add('active')
+            }
+        };
+
+        const sellActive = () => {
+            const isActive = action__sell.classList.contains('active');
+            if (!isActive) {
+                action__buy.classList.remove('active');
+                action__sell.classList.add('active')
+            }
+        };
+
+        const computeOrder = () => {
+            const entryPriceInput = document.querySelector('.input__entry-price');
+            const stopPriceInput = document.querySelector('.input__stop-price');
+            const capitalInput = document.querySelector('#input__capital');
+            const riskToRewardInput = document.querySelector('#input__risk-to-reward');
+            const EURUSD_Input = document.querySelector('#input__eurusd');
+
+            const outputAction = document.querySelector('.output__action');
+            const outputLot = document.querySelector('.output__lot');
+            const outputTP = document.querySelector('.output__TP');
+            const outputTP_cash = document.querySelector('.output__TP__cash');
+            const outputSL = document.querySelector('.output__SL');
+            const outputSL_cash = document.querySelector('.output__SL__cash');
+            
+            const entryPrice = entryPriceInput.value;
+            const stopPrice = stopPriceInput.value;
+            const EURUSD = EURUSD_Input.value;
+            const capital = capitalInput.value;
+            const riskToReward = riskToRewardInput.value;
+
+            if (capital < 1) {
+                outputAction.innerHTML = 'ERROR';
+                outputLot.innerHTML = ``;
+                outputSL.innerHTML = `please check your capital input`;
+                outputSL_cash.innerHTML = ``;
+                outputTP.innerHTML = ``;
+                outputTP_cash.innerHTML = ``;
+                return window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (entryPrice < 1) {
+                outputAction.innerHTML = 'ERROR';
+                outputLot.innerHTML = ``;
+                outputSL.innerHTML = `please check your entry price input`;
+                outputSL_cash.innerHTML = ``;
+                outputTP.innerHTML = ``;
+                outputTP_cash.innerHTML = ``;
+                return window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (stopPrice < 1) {
+                outputAction.innerHTML = 'ERROR';
+                outputLot.innerHTML = ``;
+                outputSL.innerHTML = `please check your stop price input`;
+                outputSL_cash.innerHTML = ``;
+                outputTP.innerHTML = ``;
+                outputTP_cash.innerHTML = ``;
+                return window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            const risk = riskToReward.split(':')[0];
+            const reward = riskToReward.split(':')[1];
+
+            const riskInEuro = ((risk / 100) * capital).toFixed(2);
+            const rewardInEuro = ((reward / 100) * capital).toFixed(2);
+
+            const riskInDollar = (riskInEuro * EURUSD);
+
+            if (action__buy.classList.contains('active')) {
+                // BUY
+                if (entryPrice > stopPrice) {
+                    const stopLossPips = (entryPrice - stopPrice).toFixed(2) * 100;
+                    const takeProfitPips = (stopLossPips * reward).toFixed(0);
+                    const takeProfitPrice = Number(entryPrice) + (takeProfitPips / 100);
+                    const lotQuantity = (riskInDollar / stopLossPips).toFixed(2);
+
+                    outputAction.innerHTML = 'BUY';
+                    outputLot.innerHTML = lotQuantity;
+                    outputSL.innerHTML = `SL:  ${stopPrice}`;
+                    outputSL_cash.innerHTML = `- €${riskInEuro}`;
+                    outputTP.innerHTML = `TP:  ${takeProfitPrice.toFixed(2)}`;
+                    outputTP_cash.innerHTML = `+ €${rewardInEuro}`;
+                } else {
+                    outputAction.innerHTML = 'ERROR';
+                    outputLot.innerHTML = ``;
+                    outputSL.innerHTML = `Perhaps you mean to SELL?`;
+                    outputSL_cash.innerHTML = ``;
+                    outputTP.innerHTML = ``;
+                    outputTP_cash.innerHTML = ``;
+                };
+            } else {
+                // SELL
+                if (entryPrice < stopPrice) {
+                    const stopLossPips = (stopPrice - entryPrice).toFixed(2) * 100;
+                    const takeProfitPips = (stopLossPips * reward).toFixed(0);
+                    const takeProfitPrice = Number(entryPrice) - (takeProfitPips / 100);
+                    const lotQuantity = (riskInDollar / stopLossPips).toFixed(2);
+                    outputAction.innerHTML = 'SELL';
+                    outputLot.innerHTML = lotQuantity;
+                    outputSL.innerHTML = `SL:  ${stopPrice}`;
+                    outputSL_cash.innerHTML = `- €${riskInEuro}`;
+                    outputTP.innerHTML = `TP:  ${takeProfitPrice.toFixed(2)} + €${rewardInEuro}`;
+                    outputTP_cash.innerHTML = `+ €${rewardInEuro}`;
+                } else {
+                    outputAction.innerHTML = 'ERROR';
+                    outputLot.innerHTML = ``;
+                    outputSL.innerHTML = `Perhaps you mean to BUY?`;
+                    outputSL_cash.innerHTML = ``;
+                    outputTP.innerHTML = ``;
+                    outputTP_cash.innerHTML = ``;
+                };
+            }
+            return window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        action__buy.addEventListener('click', buyActive)
+        action__buy.addEventListener('keypress', buyActive)
+        
+        action__sell.addEventListener('click', sellActive)
+        action__sell.addEventListener('keypress', sellActive)
+
+        submit.addEventListener('click', computeOrder);
+
+    </script>
+</body>
+
+</html>
